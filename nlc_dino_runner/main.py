@@ -5,4 +5,4 @@ if __name__ == '__main__':
     game = Game()
     game.run()
 
-print('HELLO WORLD')
+print('HELLO WORLD2')
