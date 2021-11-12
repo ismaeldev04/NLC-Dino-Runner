@@ -17,8 +17,6 @@ class Game:
 
     def __init__(self):
         pygame.init()
-        pygame.font.init()
-        pygame.mixer.init()
         pygame.display.set_caption(TITTLE)
         pygame.display.set_icon(ICON)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -49,9 +47,13 @@ class Game:
     def print_menu_elements(self):
         half_width = SCREEN_WIDTH // 2
         half_height = SCREEN_HEIGHT // 2
-        text_element, text_element_rec = texxt_utils.get_centered_message('press any key to start')
+        if self.death_count > 0:
+            text_element, text_element_rec = texxt_utils.get_centered_message('press any key to restart')
+        else:
+            text_element, text_element_rec = texxt_utils.get_centered_message('press any key to start')
         self.screen.blit(text_element, text_element_rec)
-        text_element, text_element_rec = texxt_utils.get_centered_message('death Count : ' + str(self.death_count), height = half_height + 50)
+        if self.death_count > 0:
+            text_element, text_element_rec = texxt_utils.get_centered_message('death Count : ' + str(self.death_count), height = half_height + 50)
         self.screen.blit(text_element, text_element_rec)
         self.screen.blit(ICON, (half_width - 40, half_height - 150))
 

@@ -4,6 +4,7 @@ from nlc_dino_runner.componers.obstacles.cactus import Cactus
 from nlc_dino_runner.utils.constants import SMALL_CACTUS
 
 
+
 class ObstacleManager:
 
     def __init__(self):
