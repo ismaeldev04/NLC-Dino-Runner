@@ -16,7 +16,7 @@ class Dinosaur(Sprite):
         # self.image = RUNNING[0]
         self.run_img = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD}
         self.duck_img = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD}
-        self.jump_img = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: JUMPING_SHIELD}
+        self.jump_img = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD}
         self.type = DEFAULT_TYPE
         self.image = self.run_img[self.type][0]
         self.shield = False
