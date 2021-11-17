@@ -1,5 +1,6 @@
 import pygame
 
+from nlc_dino_runner.componers.powerups.lifes import Life
 from nlc_dino_runner.componers.powerups.power_up_manager import PowerUpManager
 from nlc_dino_runner.utils import texxt_utils
 from nlc_dino_runner.componers.obstacles.cactus import Cactus
@@ -13,6 +14,7 @@ from nlc_dino_runner.utils.constants import (
 
 )
 from nlc_dino_runner.componers.dinosaurio import Dinosaur
+from nlc_dino_runner.utils.texxt_utils import black_color
 
 
 class Game:
@@ -33,6 +35,14 @@ class Game:
         self.points = 0
         self.running = True
         self.death_count = 0
+        self.hearth = Life()
+
+    def print_number_lifes(self):
+        font = pygame.font.Font("freesansbold.ttf", 20)
+        text = font.render(str(self.obstacle_manager.lifes), True, black_color)
+        text_rect = text.get_rect()
+        text_rect.center = (60, 10)
+        self.screen.blit(text, text_rect.center)
 
     def score(self):
         self.points += 1
@@ -107,6 +117,8 @@ class Game:
         self.obstacle_manager.draw(self.screen)
         self.power_up_manager.draw(self.screen)
         self.score()
+        self.hearth.draw(self.screen)
+        self.print_number_lifes()
         pygame.display.update()
         pygame.display.flip()
 
