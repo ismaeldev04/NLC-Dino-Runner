@@ -12,6 +12,3 @@ class Life(Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
-
-    def reset_life(self):
-        self.life = []
