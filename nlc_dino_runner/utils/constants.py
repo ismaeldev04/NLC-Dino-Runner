@@ -72,4 +72,6 @@ ICON = pygame.image.load(os.path.join(IMG_DIR, 'DinoWallpaper.png'))
 
 DEFAULT_TYPE = "default"
 SHIELD_TYPE = 'shield'
+HAMMER_TYPE = 'hammer'
 LIFES = 5
+HAMMERS = 3

@@ -5,7 +5,6 @@ from nlc_dino_runner.utils.constants import SMALL_CACTUS, LIFES
 from nlc_dino_runner.utils.constants import SMALL_CACTUS
 
 
-
 class ObstacleManager:
 
     def __init__(self):
