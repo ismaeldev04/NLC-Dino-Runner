@@ -15,6 +15,7 @@ from nlc_dino_runner.utils.constants import (
     HAMMER_TYPE,
     HAMMER
 )
+from nlc_dino_runner.componers.powerups.hammer import Hammer
 from pygame.sprite import Sprite
 
 
@@ -45,8 +46,9 @@ class Dinosaur(Sprite):
         self.dino_jump = False
         self.jum_vel = self.JUMP_VEL
         self.hammer = False
+        self.hammer_time_up = 0
         self.hammer_speed = 15
-        self.throw_hammer = throw_hammer
+        self.throw_hammer = False
 
     def update(self, user_input):
         if self.dino_run:
@@ -71,8 +73,6 @@ class Dinosaur(Sprite):
 
         if self.step_index >= 10:
             self.step_index = 0
-
-        self.throw_hammer.update()
 
     def draw(self, screen):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
@@ -118,16 +118,18 @@ class Dinosaur(Sprite):
                 self.shield = False
                 self.update_type_to_default(SHIELD_TYPE)
 
-    def throw_hammer(self, user_input):
-        self.image = HAMMER
-        self.rect = self.image.get_rect()
-        self.rect.x = 300
-        self.hammer_speed = 15
-        if self.hammer:
-            if user_input[pygame.K_SPACE]:
-                self.rect.x += self.hammer_speed
-                if self.rect.x > self.rect.width:
-                    self.image.pop()
+        elif self.hammer:
+            time_to_show = round((self.hammer_time_up - pygame.time.get_ticks()) / 1000, 2)
+            if time_to_show >= 0:
+                if self.show_text:
+                    font = pygame.font.Font(self.FONT_STYLE, 15)
+                    text = font.render(f'Hammer anable for {time_to_show}', True, self.black_color)
+                    text_rect = text.get_rect()
+                    text_rect.center = (500, 50)
+                    screen.blit(text, text_rect)
+            else:
+                self.hammer = False
+                self.update_type_to_default(HAMMER_TYPE)
 
     def update_type_to_default(self, current_type):
         if self.type == current_type:

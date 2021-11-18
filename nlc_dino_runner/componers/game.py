@@ -1,4 +1,5 @@
 import pygame
+import time
 
 from nlc_dino_runner.componers.powerups.lifes import Life
 from nlc_dino_runner.componers.powerups.power_up_manager import PowerUpManager
@@ -10,8 +11,9 @@ from nlc_dino_runner.utils.constants import (
     ICON,
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
-    BG
-
+    BG,
+    FPS,
+    CLOUD
 )
 from nlc_dino_runner.componers.dinosaurio import Dinosaur
 from nlc_dino_runner.utils.texxt_utils import black_color
@@ -26,9 +28,11 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.playing = False
-        self.game_speed = 30
+        self.game_speed = 15
         self.x_pos_bg = 0
         self.y_pos_bg = 380
+        self.x_pos_cloud = SCREEN_WIDTH
+        self.y_pos_cloud = 100
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
@@ -63,12 +67,11 @@ class Game:
         half_width = SCREEN_WIDTH // 2
         half_height = SCREEN_HEIGHT // 2
         if self.death_count > 0:
-            text_element, text_element_rec = texxt_utils.get_centered_message('press any key to restart')
+            text_element, text_element_rec = texxt_utils.get_centered_message('press any key to restart. Death Count : '
+                                                                              + str(self.death_count),
+                                                                              height=half_height + 50)
         else:
             text_element, text_element_rec = texxt_utils.get_centered_message('press any key to start')
-        self.screen.blit(text_element, text_element_rec)
-        if self.death_count > 0:
-            text_element, text_element_rec = texxt_utils.get_centered_message('death Count : ' + str(self.death_count), height = half_height + 50)
         self.screen.blit(text_element, text_element_rec)
         self.screen.blit(ICON, (half_width - 40, half_height - 150))
 
@@ -107,12 +110,13 @@ class Game:
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self)
-        self.power_up_manager.update(self.points, self.game_speed, self.player)
+        self.power_up_manager.update(self.points, self.game_speed, self.player, user_input)
 
     def draw(self):
         self.clock.tick(30)
         self.screen.fill((255, 255, 255))
         self.draw_background()
+        self.clouds()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.power_up_manager.draw(self.screen)
@@ -130,3 +134,12 @@ class Game:
             self.screen.blit(BG, (image_with + self.x_pos_bg, self.y_pos_bg))
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
+
+    def clouds(self):
+        image_with = CLOUD.get_width()
+        self.screen.blit(CLOUD, (self.x_pos_cloud, self.y_pos_cloud))
+        self.screen.blit(CLOUD, (image_with + self.x_pos_cloud, self.y_pos_cloud))
+        if self.x_pos_cloud <= -image_with:
+            self.screen.blit(CLOUD, (image_with + self.x_pos_cloud, self.y_pos_cloud))
+            self.x_pos_cloud = SCREEN_WIDTH
+        self.x_pos_cloud -= self.game_speed
