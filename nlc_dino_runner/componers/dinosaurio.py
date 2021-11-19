@@ -13,7 +13,8 @@ from nlc_dino_runner.utils.constants import (
     JUMPING_HAMMER,
     DUCKING_HAMMER,
     HAMMER_TYPE,
-    HAMMER
+    HAMMER,
+    HAMMERS
 )
 from nlc_dino_runner.componers.powerups.hammer import Hammer
 from pygame.sprite import Sprite
@@ -21,8 +22,8 @@ from pygame.sprite import Sprite
 
 class Dinosaur(Sprite):
     X_POS = 80
-    Y_POS = 310
-    Y_POS_DUCK = 340
+    Y_POS = 320
+    Y_POS_DUCK = 360
     JUMP_VEL = 10
     FONT_STYLE = 'freesansbold.ttf'
     black_color = (0, 0, 0)
@@ -44,7 +45,7 @@ class Dinosaur(Sprite):
         self.dino_run = True
         self.dino_duck = False
         self.dino_jump = False
-        self.jum_vel = self.JUMP_VEL
+        self.jum_vel = 10
         self.hammer = False
         self.hammer_time_up = 0
         self.hammer_speed = 15
@@ -66,19 +67,21 @@ class Dinosaur(Sprite):
             self.dino_run = False
             self.dino_duck = False
             self.dino_jump = True
+            pygame.mixer.music.load("jump_sound.wav")
+            pygame.mixer.music.play(1)
+            pygame.mixer.music.set_volume(0.2)
         elif not self.dino_jump:
             self.dino_run = True
             self.dino_duck = False
             self.dino_jump = False
 
-        if self.step_index >= 10:
+        if self.step_index == 10:
             self.step_index = 0
 
     def draw(self, screen):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
     def run(self):
-        # self.image = RUNNING[0] if self.step_index < 5 else RUNNING[1]
         self.image = self.run_img[self.type][self.step_index // 5]
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.X_POS
@@ -112,25 +115,11 @@ class Dinosaur(Sprite):
                     font = pygame.font.Font(self.FONT_STYLE, 15)
                     text = font.render(f'shield anable for {time_to_show}', True, self.black_color)
                     text_rect = text.get_rect()
-                    text_rect.center = (500, 50)
+                    text_rect.center = (800, 50)
                     screen.blit(text, text_rect)
             else:
                 self.shield = False
                 self.update_type_to_default(SHIELD_TYPE)
 
-        elif self.hammer:
-            time_to_show = round((self.hammer_time_up - pygame.time.get_ticks()) / 1000, 2)
-            if time_to_show >= 0:
-                if self.show_text:
-                    font = pygame.font.Font(self.FONT_STYLE, 15)
-                    text = font.render(f'Hammer anable for {time_to_show}', True, self.black_color)
-                    text_rect = text.get_rect()
-                    text_rect.center = (500, 50)
-                    screen.blit(text, text_rect)
-            else:
-                self.hammer = False
-                self.update_type_to_default(HAMMER_TYPE)
-
-    def update_type_to_default(self, current_type):
-        if self.type == current_type:
-            self.type = DEFAULT_TYPE
+    def update_type_to_default(self):
+        self.type = DEFAULT_TYPE

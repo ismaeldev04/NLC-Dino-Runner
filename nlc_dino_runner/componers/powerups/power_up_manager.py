@@ -3,7 +3,12 @@ import pygame
 
 from nlc_dino_runner.componers.powerups.hammer import Hammer
 from nlc_dino_runner.componers.powerups.shield import Shield
-from nlc_dino_runner.utils.constants import HAMMERS, SHIELD_TYPE, DEFAULT_TYPE, HAMMER_TYPE
+from nlc_dino_runner.utils.constants import (
+    HAMMERS,
+    SHIELD_TYPE,
+    DEFAULT_TYPE,
+    HAMMER_TYPE
+)
 
 
 class PowerUpManager:
@@ -25,7 +30,6 @@ class PowerUpManager:
 
     def generate_power_ups(self, points):
         self.points = points
-        # numbers = random.randint(0, 1)
         if len(self.power_ups) == 0:
             if self.when_appears == self.points:
                 print("generating powerup")
@@ -53,24 +57,16 @@ class PowerUpManager:
                     player.shield_time_up = power_up.start_time + (time_random * 1000)
                     self.power_ups.remove(power_up)
                 else:
-                    power_up.start_time = pygame.time.get_ticks()
                     player.hammer = True
                     player.type = power_up.type
-                    power_up.start_time = pygame.time.get_ticks()
-                    time_random = random.randrange(5, 8)
-                    player.hammer_time_up = power_up.start_time + (time_random * 1000)
                     self.power_ups.remove(power_up)
-                    if self.hammers_available == 0:
-                        self.hammers_available = 3
-                        player = DEFAULT_TYPE
-                        player.hammer = False
-
         if player.hammer and user_input[pygame.K_SPACE] and not self.hammer_moving:
             self.hammers_available -= 1
             self.hammer_moving = True
             self.hammer.rect.x = player.dino_rect.x
             self.hammer.rect.y = player.dino_rect.y
         if self.hammers_available == 0:
+            self.hammers_available = 3
             player.type = DEFAULT_TYPE
             player.hammer = False
 

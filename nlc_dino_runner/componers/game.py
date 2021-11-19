@@ -4,7 +4,6 @@ import time
 from nlc_dino_runner.componers.powerups.lifes import Life
 from nlc_dino_runner.componers.powerups.power_up_manager import PowerUpManager
 from nlc_dino_runner.utils import texxt_utils
-from nlc_dino_runner.componers.obstacles.cactus import Cactus
 from nlc_dino_runner.componers.obstacles.obstacle_manager import ObstacleManager
 from nlc_dino_runner.utils.constants import (
     TITTLE,
@@ -13,7 +12,8 @@ from nlc_dino_runner.utils.constants import (
     SCREEN_HEIGHT,
     BG,
     FPS,
-    CLOUD
+    CLOUD,
+    VOLCANO
 )
 from nlc_dino_runner.componers.dinosaurio import Dinosaur
 from nlc_dino_runner.utils.texxt_utils import black_color
@@ -28,16 +28,15 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.playing = False
-        self.game_speed = 15
+        self.game_speed = 20
         self.x_pos_bg = 0
-        self.y_pos_bg = 380
+        self.y_pos_bg = 400
         self.x_pos_cloud = SCREEN_WIDTH
         self.y_pos_cloud = 100
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
         self.points = 0
-        self.running = True
         self.death_count = 0
         self.hearth = Life()
 
@@ -49,6 +48,10 @@ class Game:
         self.screen.blit(text, text_rect.center)
 
     def score(self):
+        if self.points and self.points % 400 == 0:
+            pygame.mixer.music.load("score_sound.wav")
+            pygame.mixer.music.play(1)
+            pygame.mixer.music.set_volume(0.5)
         self.points += 1
         if self.points % 20 == 0:
             self.game_speed += 1
@@ -67,6 +70,7 @@ class Game:
         half_width = SCREEN_WIDTH // 2
         half_height = SCREEN_HEIGHT // 2
         if self.death_count > 0:
+            self.player.update_type_to_default()
             text_element, text_element_rec = texxt_utils.get_centered_message('press any key to restart. Death Count : '
                                                                               + str(self.death_count),
                                                                               height=half_height + 50)
@@ -113,7 +117,7 @@ class Game:
         self.power_up_manager.update(self.points, self.game_speed, self.player, user_input)
 
     def draw(self):
-        self.clock.tick(30)
+        self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
         self.clouds()
