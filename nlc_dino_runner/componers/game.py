@@ -12,8 +12,7 @@ from nlc_dino_runner.utils.constants import (
     SCREEN_HEIGHT,
     BG,
     FPS,
-    CLOUD,
-    VOLCANO
+    CLOUD, STARS
 )
 from nlc_dino_runner.componers.dinosaurio import Dinosaur
 from nlc_dino_runner.utils.texxt_utils import black_color
@@ -48,7 +47,7 @@ class Game:
         self.screen.blit(text, text_rect.center)
 
     def score(self):
-        if self.points and self.points % 400 == 0:
+        if self.points and self.points % 500 == 0:
             pygame.mixer.music.load("score_sound.wav")
             pygame.mixer.music.play(1)
             pygame.mixer.music.set_volume(0.5)
@@ -69,15 +68,17 @@ class Game:
     def print_menu_elements(self):
         half_width = SCREEN_WIDTH // 2
         half_height = SCREEN_HEIGHT // 2
-        if self.death_count > 0:
-            self.player.update_type_to_default()
-            text_element, text_element_rec = texxt_utils.get_centered_message('press any key to restart. Death Count : '
-                                                                              + str(self.death_count),
-                                                                              height=half_height + 50)
+        if self.death_count == 0:
+            text_element, text_element_rec = texxt_utils.get_centered_message('press any key to restart')
+            self.screen.blit(text_element, text_element_rec)
         else:
-            text_element, text_element_rec = texxt_utils.get_centered_message('press any key to start')
-        self.screen.blit(text_element, text_element_rec)
-        self.screen.blit(ICON, (half_width - 40, half_height - 150))
+            text_element, text_element_rec = texxt_utils.get_centered_message("Press any key to restart ")
+            self.screen.blit(text_element, text_element_rec)
+        if self.death_count != 0:
+            text_element, text_element_rec = texxt_utils.get_centered_message("Death Count : " + str(self.death_count),
+                                                                            height=half_height + 50)
+            self.screen.blit(text_element, text_element_rec)
+        self.screen.blit(ICON, (half_width - 40, half_height - 200))
 
     def handle_key_events_on_menu(self):
         for event in pygame.event.get():
@@ -121,6 +122,7 @@ class Game:
         self.screen.fill((255, 255, 255))
         self.draw_background()
         self.clouds()
+        self.stars()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.power_up_manager.draw(self.screen)
@@ -147,3 +149,8 @@ class Game:
             self.screen.blit(CLOUD, (image_with + self.x_pos_cloud, self.y_pos_cloud))
             self.x_pos_cloud = SCREEN_WIDTH
         self.x_pos_cloud -= self.game_speed
+
+    def stars(self):
+        image_with = STARS.get_width()
+        self.screen.blit(STARS, (self.x_pos_cloud, self.y_pos_cloud + 60))
+        self.screen.blit(STARS, (image_with + self.x_pos_cloud, self.y_pos_cloud + 50))

@@ -14,7 +14,10 @@ from nlc_dino_runner.utils.constants import (
     DUCKING_HAMMER,
     HAMMER_TYPE,
     HAMMER,
-    HAMMERS
+    HAMMERS,
+    PACMAN,
+    PACMAN_TYPE,
+    PACMAN_JUMP
 )
 from nlc_dino_runner.componers.powerups.hammer import Hammer
 from pygame.sprite import Sprite
@@ -30,14 +33,15 @@ class Dinosaur(Sprite):
 
     def __init__(self):
         # self.image = RUNNING[0]
-        self.run_img = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
-        self.duck_img = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
-        self.jump_img = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
+        self.run_img = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER, PACMAN_TYPE: PACMAN}
+        self.duck_img = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER, PACMAN_TYPE: PACMAN}
+        self.jump_img = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER, PACMAN_TYPE: PACMAN_JUMP}
         self.type = DEFAULT_TYPE
         self.image = self.run_img[self.type][0]
         self.shield = False
         self.shield_time_up = 0
         self.show_text = False
+        self.pacman = False
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
@@ -108,18 +112,21 @@ class Dinosaur(Sprite):
             self.jum_vel = self.JUMP_VEL
 
     def check_invincibility(self, screen):
-        if self.shield:
+        if self.shield or self.pacman:
             time_to_show = round((self.shield_time_up - pygame.time.get_ticks()) / 1000, 2)
             if time_to_show >= 0:
                 if self.show_text:
                     font = pygame.font.Font(self.FONT_STYLE, 15)
-                    text = font.render(f'shield anable for {time_to_show}', True, self.black_color)
+                    text = font.render(f'Power Up enable for {time_to_show}', True, self.black_color)
                     text_rect = text.get_rect()
                     text_rect.center = (800, 50)
                     screen.blit(text, text_rect)
             else:
                 self.shield = False
+                self.pacman = False
                 self.update_type_to_default(SHIELD_TYPE)
+                self.update_type_to_default(PACMAN_TYPE)
 
-    def update_type_to_default(self):
-        self.type = DEFAULT_TYPE
+    def update_type_to_default(self, current_type):
+        if self.type == current_type:
+            self.type = DEFAULT_TYPE

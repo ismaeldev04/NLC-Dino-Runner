@@ -24,6 +24,12 @@ RUNNING_HAMMER = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1Hammer.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2.png")),
 ]
+PACMAN = [
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Pacman1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Pacman2.png"))
+
+]
+PACMAN_JUMP = pygame.image.load(os.path.join(IMG_DIR, "Dino/Pacman1.png"))
 
 JUMPING = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJump.png"))
 JUMPING_SHIELD = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpShield.png"))
@@ -63,6 +69,7 @@ BIRD = [
 CLOUD = pygame.image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
 SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Other/shield.png'))
 HAMMER = pygame.image.load(os.path.join(IMG_DIR, 'Other/hammer.png'))
+PACMAN_POWER_UP = pygame.image.load(os.path.join(IMG_DIR, 'Other/pacman3.png'))
 
 BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
 
@@ -70,8 +77,12 @@ HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
 
 ICON = pygame.image.load(os.path.join(IMG_DIR, 'DinoWallpaper.png'))
 
+STARS = pygame.image.load(os.path.join(IMG_DIR, 'stars.png'))
+
 DEFAULT_TYPE = "default"
 SHIELD_TYPE = 'shield'
 HAMMER_TYPE = 'hammer'
+PACMAN_TYPE = "pacman"
+
 LIFES = 5
 HAMMERS = 3

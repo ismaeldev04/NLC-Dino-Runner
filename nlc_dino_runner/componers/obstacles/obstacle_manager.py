@@ -4,7 +4,6 @@ import random
 from nlc_dino_runner.componers.obstacles.cactus import Cactus
 from nlc_dino_runner.utils.constants import SMALL_CACTUS, LIFES, BIRD
 from nlc_dino_runner.componers.obstacles.bird import Birds
-from nlc_dino_runner.componers.powerups.power_up_manager import PowerUpManager
 
 
 class ObstacleManager:
@@ -13,12 +12,12 @@ class ObstacleManager:
         self.obstacles = []
         self.lifes = LIFES
         self.option_numbers = list(range(1, 10))
-        self.power_up = PowerUpManager()
         self.game_speed = 15
 
     def update(self, game):
         if len(self.obstacles) == 0:
-            self.game_speed += 1
+            if self.game_speed <= 50:
+                self.game_speed += 1
             random.shuffle(self.option_numbers)
             if self.option_numbers[0] <= 6:
                 self.obstacles.append(Cactus(SMALL_CACTUS))
